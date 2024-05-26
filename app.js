@@ -102,9 +102,10 @@ app.use('/api/categorias', categoriasRouter);
 
 app.use('/api/dietetica', dieteticaRouter);
 
+const PORT = process.env.PORT || 3000; 
 
-app.listen(3000, () => {
-  console.log(`Servidor escuchando en el puerto 3000`);
+app.listen(PORT, () => {
+  console.log(`Servidor escuchando en el puerto ${PORT}`);
 });
 
 testConnection();
