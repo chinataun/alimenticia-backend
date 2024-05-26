@@ -40,7 +40,9 @@ require('./configuracion/passport')
 
 app.use(express.json());
 app.use(cors({
-  origin: 'https://alimenticia.es',
+  origin: 'http://localhost:4200',
+  
+  // origin: 'https://alimenticia.es',
   credentials: true, // Habilita las cookies y credenciales de sesión
 }));
 app.use(bodyParser.urlencoded({ extended: true }));
