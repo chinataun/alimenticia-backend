@@ -28,7 +28,7 @@ const {testConnection} = require('./models/index')
 
 const cookieParser = require('cookie-parser')
 const flash = require('connect-flash')
-const { port,db, sequelize } = require('./config');
+const { sequelize } = require('./config');
 const methodOverride = require('method-override')
 const cors = require('cors');
 const bodyParser = require('body-parser');;
@@ -103,8 +103,8 @@ app.use('/api/categorias', categoriasRouter);
 app.use('/api/dietetica', dieteticaRouter);
 
 
-app.listen(port, () => {
-  console.log(`Servidor escuchando en el puerto ${process.env.NODE_DOCKER_PORT}`);
+app.listen(3000, () => {
+  console.log(`Servidor escuchando en el puerto 3000`);
 });
 
 testConnection();
