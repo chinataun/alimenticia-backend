@@ -30,11 +30,15 @@ console.log(process.env.MYSQLDB_DOCKER_PORT)
 // });
 
 // mysql://b14e3d42c4a909:c1c1984d@eu-cluster-west-01.k8s.cleardb.net/heroku_89dafaa0be8bd74?reconnect=true
-const sequelize = new Sequelize('heroku_89dafaa0be8bd74', 'b14e3d42c4a909', 'c1c1984d', {
-  host: 'eu-cluster-west-01.k8s.cleardb.net',
+// const sequelize = new Sequelize('heroku_89dafaa0be8bd74', 'b14e3d42c4a909', 'c1c1984d', {
+//   host: 'eu-cluster-west-01.k8s.cleardb.net',
+//   dialect: 'mysql',   
+// });
+const sequelize = new Sequelize('10446497_alimenticia', 'alimenticia', 'j7T3&ik90', {
+  host: 'PMYSQL175.dns-servicio.com',
+  port: 3306,
   dialect: 'mysql',   
 });
-
 
 
 // sequelize.authenticate().then(() => {
