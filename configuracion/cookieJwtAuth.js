@@ -7,9 +7,9 @@ function authenticate(req, res, next) {
   if (!token) return res.status(401).json({ message: "No autorizado" });
   
   try {
-    const decoded = jwt.verify(token, "SECRET"); // Verifica el token con tu secreto
-    req.user = decoded.user; // Agrega el ID del usuario al objeto de solicitud
-    next(); // Continúa con la siguiente función de middleware
+    const decoded = jwt.verify(token, "SECRET");
+    req.user = decoded.user;
+    next();
   } catch (error) {
     return res.status(403).json({ message: "Token inválido" });
   }
@@ -28,12 +28,7 @@ function authenticateToken(req, res, next) {
             // Tiene token
           try {
               jwt.verify(token, process.env.SECRET_KEY || 'SECRET')
-              //, (err, user) => {
-                //if (err) return res.sendStatus(403)
-                //console.log(next)
-                //req.user = user
                 next()
-              //})
           } catch (error) {
             console.log(error)
               res.status(401).json({

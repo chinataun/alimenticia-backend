@@ -3,13 +3,7 @@ const app = express();
 const dotenv = require('dotenv')
 dotenv.config();
 
-const session = require('express-session'); // Agrega esta línea
-const usuariosRouter = require('./routers/usuarioRouter')
-
-const calculadoraCaloriasRouter= require('./routers/calculadoraCaloriasRouter')
-
-const listaCompraRouter = require('./routers/listaCompraRouter')
-const receta = require('./routers/routerRecetas2023')
+const session = require('express-session');
 const { QueryTypes } = require('sequelize');
 //routes
 const userRouter = require('./routers/userRouter')
@@ -18,31 +12,33 @@ const alimentosRouter = require('./routers/alimentosRouter')
 const productosRouter = require('./routers/productosRouter')
 const categoriasRouter = require('./routers/categoriasRouter')
 const dieteticaRouter = require('./routers/dieteticaRouter')
-const apiFoods = require('./routers/ApiFoodsRouter');
 
-// Modelos
-const User = require('./models/user');
-const { Sequelize } = require('sequelize');
-const Receta = require('./models/receta');
 const {testConnection} = require('./models/index')
 
 const cookieParser = require('cookie-parser')
 const flash = require('connect-flash')
-const { sequelize } = require('./config');
 const methodOverride = require('method-override')
 const cors = require('cors');
 const bodyParser = require('body-parser');;
-const normalizeString = (str) => str.toLowerCase().replace(/[^a-zA-Z0-9 ]/g, '');
 const path = require("path");
 const {authenticate, authenticateToken} = require('./configuracion/cookieJwtAuth')
 const passport = require('passport');
 require('./configuracion/passport')
 
+const { NODE_ENV } = process.env
+
+let origin;
+if (process.env.NODE_ENV === 'development') {
+  origin = 'http://localhost:4200';
+  console.log('Development mode');
+} else {
+  origin = 'https://alimenticia.es';
+  console.log('Production mode');
+} 
+
 app.use(express.json());
 app.use(cors({
-  // origin: 'http://localhost:4200',
-  
-  origin: 'https://alimenticia.es',
+  origin: origin,
   credentials: true, // Habilita las cookies y credenciales de sesión
 }));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -77,8 +73,8 @@ app.use((req, res, next) => {
 // static files
 // app.use(express.static('public'))
 // Configurar la ruta para servir archivos estáticos desde la carpeta 'imagenes'
-app.use('/imagenes/usuario-imagen', express.static(path.join(__dirname, 'imagenes', 'usuario-imagen')));
-app.use('/imagenes/recetas-imagen', express.static(path.join(__dirname, 'imagenes', 'recetas-imagen')));
+// app.use('/imagenes/usuario-imagen', express.static(path.join(__dirname, 'imagenes', 'usuario-imagen')));
+// app.use('/imagenes/recetas-imagen', express.static(path.join(__dirname, 'imagenes', 'recetas-imagen')));
 
 // app.use('/css', express.static(__dirname + 'public/css'))
 app.use('/public/images', express.static(path.join(__dirname, 'public', 'images')))
@@ -87,21 +83,11 @@ app.use('/public/uploads', express.static(path.join(__dirname, 'public', 'upload
 // app.use('/uploads', express.static(__dirname + 'public/uploads'))
 // app.use('/js', express.static(__dirname + 'public/js'))
 
-app.use('/apiFoods', apiFoods);
-//app.use('/r', usuarioRouter);
-app.use('/user',usuariosRouter )
-app.use('/dietetica', calculadoraCaloriasRouter)
-app.use('/lista_compras',listaCompraRouter)
-app.use('/prueba',receta)
-// app.use('/',(req, res) => {
-//   res.send('Hola mundo');
-// })
 app.use('/api/user', userRouter);
 app.use('/api/recetas', recetaRouter);
 app.use('/api/alimentos', alimentosRouter);
 app.use('/api/productos', productosRouter);
 app.use('/api/categorias', categoriasRouter);
-
 app.use('/api/dietetica', dieteticaRouter);
 
 const PORT = process.env.PORT || 3000; 

@@ -4,9 +4,8 @@ const { Alimento, Temporada, CategoriaAlimento, Almacenaje, Producto } = require
 const Seleccion = require('../models/seleccion');
 
 const { port,db, sequelize } = require('../config');
-const { Op, QueryTypes } = require('sequelize');
+const { Op } = require('sequelize');
 const getAlimentos = async (req, res) => {
-  // const mes = req.params.mes;
 
   try {
     const alimentos = await Alimento.findAll({
@@ -54,18 +53,8 @@ const getAlimento = async (req, res) => {
         ]
       }
     );
-    // const alimentos = await Alimento.findAll({
-    //   include: [{
-    //     model: Temporada,
-    //     as: 'temporadas'
-    //   }, {
-    //     model: Categoria,
-    //     as: 'categoria'
-    //   }]
-    // });
     res.json(alimento);
   } catch (error) { 
-
     console.log(error);
     res.status(500).json({ message: 'Error en el servidor' });
   }
@@ -76,7 +65,6 @@ const getBusquedaAlimento = async (req, res) => {
   const nombre = req.params.nombre;
 
   try  {
-    //findAll donde el termino pueda esta encluido en el nombre o en la SubCategoriaNuestra
     const lowerCaseTerm = nombre.toLowerCase();
     const supermercados = ['dia', 'ahorramas', 'eroski', 'alcampo']
     const results = {};
@@ -97,19 +85,13 @@ const getBusquedaAlimento = async (req, res) => {
       });
       results[supermercado] = productos;
     }
-
-
     res.json(results);
-  
-      // console.log('Resultados', rows);
-      // return rows.length > 0 ? rows[0] : null;
     } catch (error) {
       console.error('Error al obtener la búsqueda desde la base de datos:', error);
       return null;
     }
 
 };
-
 
 module.exports = {
   getAlimento,
