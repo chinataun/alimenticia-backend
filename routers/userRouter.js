@@ -5,7 +5,7 @@ const { getUser, loginUser, newUser, updateUser,checkPassword, getListasCompras,
 const { update } = require('../models/user');
 const multer = require('multer');
 // const upload = multer({ dest: 'uploads/' });
-const upload = require('../utils/handleUpload')
+const uploadFields = require('../utils/handleUpload')
 
 
 
@@ -27,7 +27,7 @@ router.post('/login', function(req, res, next) {
       return next();
     })(req, res, next)},  loginUser)
 
-router.put("/edit", upload.single('imagen'), updateUser);
+router.put("/edit", uploadFields, updateUser);
 
 router.delete("/", deleteUser);
 

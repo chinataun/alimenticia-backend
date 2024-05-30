@@ -27,8 +27,6 @@ const getProductosXTermino = async (req, res) => {
 
   const { termino } = req.params;
   const { marca } = req.query;
-  console.log('Marca', marca);
-  console.log('Termino', termino);
  try  {
   //findAll donde el termino pueda esta encluido en el nombre o en la SubCategoriaNuestra
   const lowerCaseTerm = termino.toLowerCase();
@@ -55,8 +53,6 @@ const getProductosXTermino = async (req, res) => {
 
   
   res.json(productos);
-    // console.log('Resultados', rows);
-    // return rows.length > 0 ? rows[0] : null;
   } catch (error) {
     console.error('Error al obtener la búsqueda desde la base de datos:', error);
     return null;
@@ -67,7 +63,6 @@ const getProductosXTermino = async (req, res) => {
 const getProductoSimilar = async (req, res) => {
   const {producto} = req.query;
   const productojson = JSON.parse(producto);
-  console.log('Producto', productojson);
   
 
   let supers = ['dia', 'ahorramas', 'eroski', 'alcampo'];
@@ -75,13 +70,6 @@ const getProductoSimilar = async (req, res) => {
   if (index > -1) {
     supers.splice(index, 1);
   }
-  // iterar los elementos del producto
-  // buscar productos con nombre similar
-  // calcular similitud
-  // devolver el producto con mayor similitud
-  // for (const [clave, valor] of Object.entries(producto)) {
-  //   console.log(`${clave}: ${valor}`);
-  // }
 
   if (!producto) {
     return res.status(404).json({ error: 'Producto no encontrado' });
@@ -109,7 +97,6 @@ const getProductoSimilar = async (req, res) => {
     }
   });
 
-  // console.log('Productos similares', productosSimilares);
   // const productos = await Producto.findAll({
   //   where: {
   //     super: 'ahorramas',

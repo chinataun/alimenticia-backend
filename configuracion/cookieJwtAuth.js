@@ -2,8 +2,6 @@ const jwt = require("jsonwebtoken");
 
 function authenticate(req, res, next) {
   const token = req.cookies.token;
-  console.log(req.cookies)
-  console.log(token)
   if (!token) return res.status(401).json({ message: "No autorizado" });
   
   try {
@@ -24,20 +22,18 @@ function authenticateToken(req, res, next) {
     return res.status(401).json({
     message: 'Acceso denegado'
     })
-  } else {
-            // Tiene token
-          try {
-              jwt.verify(token, process.env.SECRET_KEY || 'SECRET')
-                next()
-          } catch (error) {
-            console.log(error)
-              res.status(401).json({
-                  msg: 'token no valido'
-              })
-          }
+  } 
+  else {
+    
+    try {
+        jwt.verify(token, process.env.SECRET_KEY || 'SECRET')
+          next()
+    } catch (error) {
+        res.status(401).json({
+            msg: 'token no valido'
+        })
+    }
   }
-
-
 }
 
 module.exports = {authenticate, authenticateToken}

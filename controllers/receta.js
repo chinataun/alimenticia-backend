@@ -13,7 +13,6 @@ const addReceta = async (request, response, error) => {
 
     try {
         const { titulo, supermercado, comensales,tiempo, ingredientes, pasos, categoriaId, dificultad, userId } = request.body;
-        console.log('body', body);
         const usuario = await User.findByPk(userId);
         if (!usuario) {
           return response.status(404).json({ success: false, message: 'Usuario no encontrado' });
@@ -74,72 +73,10 @@ const addReceta = async (request, response, error) => {
         
     }
 
-    // const { files, body, user } = request
-    
-    // const createReceta = await Receta.create({
-    //     titulo: faker.commerce.product(),
-    //     descripcion: faker.commerce.productDescription(),
-    // })
-    // try {
-    //     // Guardarmos usuario en la base de datos
-    //     const p = await Receta.create({
-    //         titulo: "pedo",
-    //         descripcion: "blablabla"
-    //     })
-    
-    //     response.status(201).json({
-    //         msg: `Usuario creado exitosamente!`
-    //     })
-    // } catch (error) {
-    //     response.status(400).json({
-    //         msg: 'Upps ocurrio un error',
-    //         error
-    //     })
-    // }
-    // response.status(201).json({
-    //         msg: createReceta
-    //     })
-    // let imageUploaded = body.imageUploaded;
-    // if (imageUploaded) {
-    //     try {
-    //         await unlinkAsync("public/uploads/" + imageUploaded)
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    // }
-    
-    // imageUploaded = files.image[0].filename;
-
-    // try {
-
-    // // const userFound = await User.findById(user.id).populate([{
-    // //   path: 'user',
-    // //   model: 'Protectora',
-    // //   populate: {
-    // //     path: 'animales',
-    // //     model: 'Animal',
-    // //   }
-    // // }])
-    // const receta = Receta.create({
-    //     titulo: body.titulo,
-    // })
-    // res.status(201).json({
-    //     msg: `Receta ${body.titulo} creado exitosamente!`
-    // })
-    // } catch (error) {
-    // res.status(400).json({
-    //     msg: 'Upps ocurrio un error',
-    //     error
-    // })
-    // }
-
-
 }
 
 //dones
 const getRecetas = async (request, response, error) => {
-  // const recetas = await Receta.findAll();
-  // response.status(201).json(recetas)
   try {
     const recetas = await Receta.findAll({
       include: [
@@ -222,19 +159,13 @@ const getReceta = async (request, response, error) => {
 
 const editReceta = async (request, response, error) => {
     const { body } = request
-    const imagen = request.file ? request.file.path : null; // usa el path del archivo si se subió uno
-    console.log('request', request.files)
+    
+    const imagen = request.files['imagenPrincipal'] ? request.files['imagenPrincipal'][0].path : null; // usa el path del archivo si se subió uno
     try {
       const { titulo, supermercado, comensales,tiempo, categoriaId, dificultad, userId, idReceta, ingredientes, pasos, status } = body
 
-        
-        // const usuario = await User.findByPk(userId);
-        // if (!usuario) {
-        //   return response.status(404).json({ success: false, message: 'Usuario no encontrado' });
-        // }
-        // Guardarmos usuario en la base de datos
         const receta = await Receta.findByPk(idReceta);
-        //console.log('receta', receta);
+
         if (!receta) {
           return response.status(404).json({ success: false, message: 'Receta no encontrada' });
         }
@@ -252,10 +183,6 @@ const editReceta = async (request, response, error) => {
         }     
        
        await receta.update(recetaUpdated);
-      //  console.log('recetaUpdated', recetaUpdated)
-        // attributes: { exclude: ['id', 'password', 'createdAt', 'updatedAt']}});
-        // Devolvemos una respuesta al cliente con un mensaje de exito y la receta creada sin los campos updateAt y createAt.
-        // Convert the Sequelize instance to a plain JavaScript object
         response.status(201).json({ success: true, message: 'Receta actualizada' });
       } catch (error) {
         response.status(500).json({ success: false, message: 'Error al actualizar la receta', error });
@@ -336,7 +263,6 @@ const getRecetasByUser = async (request, response, error) => {
 const getFavorites =  async (req, res) => {
 
   const { userId } = req.query;
-  // console.log(req.query)
   try {
     const usuario = await User.findByPk(userId);
     if (!usuario) {
@@ -370,7 +296,6 @@ const getFavorites =  async (req, res) => {
 const getCreated =  async (req, res) => {
 
   const { userId } = req.query;
-  // console.log(req.query)
   try {
     const usuario = await User.findByPk(userId);
     if (!usuario) {
@@ -447,7 +372,6 @@ const addRecetaFavorita = async (req, res) => {
 const isVoted =  async (req, res) => {
 
   const { userId, recetaId } = req.query;
-  console.log(req.query)
   try {
     const usuario = await User.findByPk(userId);
     const receta = await Receta.findByPk(recetaId);

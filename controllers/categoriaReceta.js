@@ -7,7 +7,6 @@ const getCategoriasReceta = async (req, res) => {
   } catch (error) { 
     res.status(500).json({ message: 'Error en el servidor' });
   }
-
 };
 
 module.exports = {

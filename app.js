@@ -25,15 +25,12 @@ const {authenticate, authenticateToken} = require('./configuracion/cookieJwtAuth
 const passport = require('passport');
 require('./configuracion/passport')
 
-const { NODE_ENV } = process.env
 
 let origin;
 if (process.env.NODE_ENV === 'development') {
   origin = 'http://localhost:4200';
-  console.log('Development mode');
 } else {
   origin = 'https://alimenticia.es';
-  console.log('Production mode');
 } 
 
 app.use(express.json());

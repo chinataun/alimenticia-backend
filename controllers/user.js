@@ -58,17 +58,15 @@ const getUser = async (req, res) => {
     if (!usuario) {
       return res.status(404).json({ success: false, message: 'Usuario no encontrado' });
     }
-    console.log(usuario)
     res.status(200).json(usuario);
   } catch (error) {
-    console.log(error)
     res.status(500).json({ success: false, message: 'Error al obtener el usuario', error });
   }
 };
 
 const deleteUser = async (req, res) => { 
   const { userId } = req.query;
-  console.log(userId)
+
   try {
   
     const usuario = await User.destroy({
@@ -76,7 +74,6 @@ const deleteUser = async (req, res) => {
         id: userId // Reemplaza esto con el ID del usuario que quieres eliminar
       }
     });
-    console.log(usuario)
     res.status(200).json({ success: false, message: 'Usuario eliminado correctamente' });
   } catch (error) {
     console.log(error)
@@ -136,9 +133,7 @@ const loginUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const { username, nombre, apellidos, apodo, cp, email, userId, supermercado } = req.body;
-  const imagen = req.file ? req.file.path : null; // usa el path del archivo si se subió uno
-
-  // const { userId } = req.query;
+  const imagen = req.files['imagenPrincipal'] ? req.files['imagenPrincipal'][0].path : null; // usa el path del archivo si se subió uno
 
   try {
     const usuario = await User.findByPk(userId);
@@ -168,7 +163,6 @@ const updateUser = async (req, res) => {
 
 const checkPassword = async (req, res) => {
   try { 
-    console.log(req.query)
     const { userId, oldPassword } = req.query;
 
 
@@ -211,7 +205,6 @@ const setSupermarketFavorite = async (req, res) => {
     // const supermarket = await Supermarket.findByPk(supermarketId);
     // await user.addSupermarket(supermarket);
     userUpdated = await user.update({supermercado: name});
-    console.log(userUpdated)
 
     res.json({ user: userUpdated, msg: 'Supermercado añadido a favoritos' });
   } catch (err) {
@@ -249,7 +242,7 @@ const setListasCompras = async (req, res) => {
   try {
     const user = await User.findByPk(userId);
     const compras = await user.getCompras();
-    console.log(compras);
+
     const carritoStr = JSON.stringify(carrito);
     for (let compra of compras) {
       if (compra.carrito === carritoStr) {
@@ -268,14 +261,13 @@ const setListasCompras = async (req, res) => {
 const setCp = async (req, res) => {
   const { userId, cp } = req.query;
   // const { cp } = req.body;
-  console.log(req.query)
-  console.log(req.body)
+
   try {
     const user = await User.findByPk(userId);
     // const supermarket = await Supermarket.findByPk(supermarketId);
     // await user.addSupermarket(supermarket);
     userUpdated = await user.update({cp: cp});
-    // console.log(userUpdated)
+
 
     res.json({ user: userUpdated, msg: 'Supermercado añadido a favoritos' });
   } catch (err) {
@@ -307,11 +299,8 @@ const getSupermarket = async (req, res) => {
       "bakery",
       "food",
       ];
-    console.log(coordenadas.data.results[0].geometry.location);
-    console.log(coordenadas.data.results[0].geometry.location);
     const { lat, lng } = coordenadas.data.results[0].geometry.location;
-    console.log(postalCode);
-    console.log(apiKey);
+
     var latlang = {
       "latitude":lat,
       "longitude":lng, 
@@ -331,7 +320,7 @@ const getSupermarket = async (req, res) => {
     // });
 
     const places = response.data.results;
-    // console.log(places);
+
     const markets = []
     places.forEach(place => {
       markets.push({
@@ -343,7 +332,6 @@ const getSupermarket = async (req, res) => {
 
       
     });
-    // console.log(coordenadas);
 
     // Filtra los resultados para incluir solo los supermercados que te interesan
     const supermarkets = markets.filter(place => ['dia', 'Supermercados Dia', 'eroski', 'alcampo', 'ahorramas'].includes(place.name.toLowerCase()));
@@ -358,7 +346,7 @@ const getSupermarket = async (req, res) => {
 
 const deleteCarritoUser = async (req, res) => { 
   const { userId, id } = req.query;
-  console.log(id)
+
   try {
     const user = await User.findByPk(userId);
     const compra = await user.getCompras(

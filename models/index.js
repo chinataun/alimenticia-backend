@@ -1,14 +1,12 @@
-const { port,db, sequelize } = require('../config');
+const { sequelize } = require('../config');
 const Alimento = require('./alimento');
 const CategoriaAlimento = require('./categoriaAlimento');
-
 const CategoriaReceta = require('./categoriaReceta');
 const Receta = require('./receta');
 const Temporada = require('./temporada');
 const User = require('./user');
 const Almacenaje = require('./almacenaje');
 const Beneficio = require('./beneficio');
-
 const Seleccion = require('./seleccion');
 const Compra = require('./compra');
 const Rating = require('./rating');
@@ -17,9 +15,6 @@ const Producto = require('./producto');
 async function testConnection() {
     try {
       await sequelize.authenticate();
-      console.log('All good')
-      console.log("Sincronizamos tablas")
-      console.log("User:")
       
       Receta.belongsToMany(User, {as: 'favoriteadas', through: 'recetas_favoritas', onDelete: 'CASCADE'});
       User.belongsToMany(Receta, {as: 'favoritas', through: 'recetas_favoritas', onDelete: 'CASCADE' });
@@ -83,26 +78,6 @@ async function testConnection() {
       Seleccion.belongsTo(Alimento, {
         as: 'alimento'
       });
-
-
-
-      // Categoria.hasMany(Alimento, {
-      //   foreignKey: 'categoriaId',
-      //   as: 'alimentos'
-      // });
-
-      // Temporada.belongsTo(Alimento, {
-      //   foreignKey: 'alimentoId',
-      //   as: 'alimento'
-      // });
-      // User.hasMany(Compra, {
-      //   //cambiar cuando se quite selecciones
-      //   as: 'seleccion',
-      //   foreignKey: 'alimentoId'
-      // });
-      // Seleccion.belongsTo(Alimento, {
-      //   as: 'alimento'
-      // });
       Compra.belongsTo(User, {
         as: 'comprador',
         foreignKey: 'userId'
@@ -114,26 +89,9 @@ async function testConnection() {
 
       Receta.belongsToMany(User, {as: 'votos', through: 'rating' });
       User.belongsToMany(Receta, {as: 'votadas', through: 'rating'});
-      // Receta.belongsToMany(User, {as: 'favoriteadas', through: 'recetas_favoritas' });
-      // User.belongsToMany(Receta, {as: 'favoritas', through: 'recetas_favoritas' });
-
-      //ListaCompra: Asociacion many to many entre User y Producto
-      // User.belongsToMany(Producto, {
-      //   through: Compra,
-      //   as: 'productos',
-      //   foreignKey: 'userId'
-      // });
-      // Producto.belongsToMany(User, {
-      //   through: Compra,
-      //   as: 'usuario',
-      //   foreignKey: 'productoId'
-      // });
-
-
-      
-      
-      sequelize.sync().then((result) =>{
-
+            
+      sequelize.sync()
+      .then((result) =>{
       }).catch((error) =>{
       console.log(error)
       })
@@ -156,5 +114,7 @@ module.exports = {
     Producto,
     Compra,
     Rating,
+    Seleccion,
+    Beneficio,
     testConnection,
 };

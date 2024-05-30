@@ -1,10 +1,7 @@
-// controllers/alimentosController.js
-const Beneficio = require('../models/beneficio');
-const { Alimento, Temporada, CategoriaAlimento, Almacenaje, Producto } = require('../models/index');
-const Seleccion = require('../models/seleccion');
-
-const { port,db, sequelize } = require('../config');
+const { Alimento, Temporada, CategoriaAlimento, Almacenaje, Producto, Seleccion, Beneficio} = require('../models/index');
+const { sequelize } = require('../config');
 const { Op } = require('sequelize');
+
 const getAlimentos = async (req, res) => {
 
   try {
@@ -55,7 +52,6 @@ const getAlimento = async (req, res) => {
     );
     res.json(alimento);
   } catch (error) { 
-    console.log(error);
     res.status(500).json({ message: 'Error en el servidor' });
   }
 
